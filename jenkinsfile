@@ -3,27 +3,42 @@ pipeline {
         docker { image 'node:7-alpine' }
     }
 
+ environment {
+        DISABLE_AUTH = 'true'
+        DB_ENGINE    = 'sqlite'
+    }
+
     stages {
         stage('Build') {
             steps {
                 echo 'Building..'
-               
-                sh 'echo "Hello World"'
-                sh '''
-                    echo "Multiline shell steps works too"
-                    ls -lah
-                '''
+                CURRENT_STAGE    = 'building'
+                echo "CURRENT_STAGE is ${CURRENT_STAGE}"
+                echo "Database engine is ${DB_ENGINE}"
+                echo "DISABLE_AUTH is ${DISABLE_AUTH}"
+                sh 'printenv'
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
+                CURRENT_STAGE    = 'testing'
+                echo "CURRENT_STAGE is ${CURRENT_STAGE}"
+                echo "Database engine is ${DB_ENGINE}"
+                echo "DISABLE_AUTH is ${DISABLE_AUTH}"
+                sh 'printenv'
                 sh 'node --version'
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+                CURRENT_STAGE    = 'deploying'
+                echo "CURRENT_STAGE is ${CURRENT_STAGE}"
+                echo "Database engine is ${DB_ENGINE}"
+                echo "DISABLE_AUTH is ${DISABLE_AUTH}"
+                sh 'printenv'
+
             }
         }
     }
