@@ -3,12 +3,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'echo "I am Iron Man!!"'
+                sh 'echo "Up"'
             }
         }
         stage('Update') {
             steps {
-                sh 'yum update -y'
+                sh 'Echo "Do somerthing on an update'
             }
         }
         stage('Decomission') {
