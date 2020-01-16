@@ -1,19 +1,29 @@
 pipeline {
     agent { docker { image 'python:3.5.1' } }
     stages {
-        stage('build') {
+        stage('IronMan') {
             steps {
-                sh 'python --version'
+                sh 'echo "I am Iron Man!!"'
             }
         }
-        stage('Do Something') {
+        stage('Thor') {
             steps {
-                sh 'echo "Do Something"'
+                sh 'echo "God of Thunder"'
             }
         }
-        stage('Poo Face') {
+        stage('Guardians') {
             steps {
-                sh 'echo "Poo Face"'
+                sh 'echo "Whats your name?.... TAZERFACE!!! Hahahahahahahahahahahaha"'
+            }
+        }
+        stage('Spiderman') {
+            steps {
+                sh 'echo "<Insert Whiny kid Here>!!"'
+            }
+        }
+        stage('Ant Man') {
+            steps {
+                sh 'echo "He gets really big too.....?"'
             }
         }
     }
