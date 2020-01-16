@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Update') {
             steps {
-                sh 'Echo "Do something"'
+                sh 'echo "Do something"'
             }
         }
         stage('Decomission') {
