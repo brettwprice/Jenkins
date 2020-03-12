@@ -1,0 +1,150 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK",
+    "name": "Configure \u0026 Kick Updating",
+    "title": "Configure \u0026 Kick Updating",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "status",
+          "type": "datatype.string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EBXE6FHW5EZ0pz9ljXJ9jM6rJXE7Lvrur",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": true,
+      "display_name": "Configure \u0026 Kick Updating",
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01EBX21OP97AL379c9Iqfp7rjdCR3cQ2TKk",
+        "name": "While Loop",
+        "title": "While Loop",
+        "type": "logic.while",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "While Loop",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01EBX21R1Z2VE7PNGIS0aZtf2Dcr2K35AZy",
+            "name": "Condition Branch",
+            "title": "Condition Branch",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBXE6FHW5EZ0pz9ljXJ9jM6rJXE7Lvrur$",
+                "operator": "ne",
+                "right_operand": "1"
+              },
+              "continue_on_failure": false,
+              "display_name": "Condition Branch",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m",
+                "name": "Execute Powershell Script",
+                "title": "Query Reg Key",
+                "type": "windows.execute_powershell_script",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 10,
+                  "continue_on_failure": false,
+                  "display_name": "Query Reg Key",
+                  "execute_remote_file": false,
+                  "powershell_script": "$userName = \"brettp@metsilabs.local\"\n$remoteClient = \"172.21.8.53\"\n\n$ScriptBlock = {\n$registryPath = \"HKLM:\\SYSTEM\\OS_Auto\"\n$KeyName = \"OS_Auto_Completed\"\n\nIF(!(Test-Path $registryPath)){\n\n    Write-Host \"Key Doesn't Exist Yet - Continuing\"\n\n    #Write-Host \"Key Doesn't Exist Yet - Creating\"\n    #New-Item -Path $registryPath -Force\n    #New-ItemProperty -Path $registryPath -Name $KeyName -Value $value -PropertyType DWORD #-Force #| Out-Null\n    #(Get-ItemProperty -Path  $registryPath -Name $KeyName).OS_Auto_Completed \n\n} Else {\n\n    #Return Key Value - OS_Auto_Completed\n    (Get-ItemProperty -Path  $registryPath -Name $KeyName).OS_Auto_Completed \n\n}}\n\n\n#Build remote credential\n\n$secpasswd = ConvertTo-SecureString $userPassword -AsPlainText -Force\n$remoteCred = New-Object System.Management.Automation.PSCredential ($userName, $secpasswd)\n\nInvoke-Command -ComputerName $remoteClient -Credential $remoteCred -ScriptBlock $ScriptBlock",
+                  "runtime_user": {
+                    "override_target_runtime_user": false,
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target": true,
+                    "target_id": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa"
+                  }
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01EBXEAMASUFL7QkrEfvl7rASVQOjPn4TXw",
+                "name": "Set Variables",
+                "title": "Set Variables",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Variables",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBXE6FHW5EZ0pz9ljXJ9jM6rJXE7Lvrur$",
+                      "variable_value_new": "$activity.definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m.output.result$"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa": {
+      "unique_name": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa",
+      "name": "UCSD-PSA",
+      "title": "UCSD-PSA",
+      "type": "windows.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG",
+        "description": "UCSD (192.148.9.47) Powershell Agent\n\nAlready has PowerCli installed and can talk to vcenter.metsilabs.local",
+        "display_name": "UCSD-PSA",
+        "host": "psa-ucsd.metsilabs.local",
+        "port": 5985,
+        "protocol": "http"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG": {
+      "unique_name": "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG",
+      "name": "brettp@metsilabs.local",
+      "title": "brettp@metsilabs.local",
+      "type": "runtime_user.windows_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "display_name": "brettp@metsilabs.local",
+        "password": "*****",
+        "username": "*****"
+      }
+    }
+  }
+}
