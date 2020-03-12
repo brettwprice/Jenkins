@@ -69,6 +69,32 @@
         },
         "unique_name": "variable_workflow_01EC114TOFMN33EhalJ9NBU0aSgV0WrixTg",
         "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 25,
+          "scope": "input",
+          "name": "NumberOfIterations",
+          "type": "datatype.integer",
+          "description": "Number of loop iterations\n\nIteration x Sleep = Total Wait Duration",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC1Z6I0PP2S2ck52JmnRDA7xEvNujNO1c",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 30,
+          "scope": "input",
+          "name": "SleepTime",
+          "type": "datatype.integer",
+          "description": "Wait between iterations (in Seconds)",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC1ZR407DBR2HB7LbbbBAmlD65D4FUiR3",
+        "object_type": "variable_workflow"
       }
     ],
     "properties": {
@@ -133,7 +159,7 @@
               "condition": {
                 "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
                 "operator": "lt",
-                "right_operand": 20
+                "right_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC1Z6I0PP2S2ck52JmnRDA7xEvNujNO1c$"
               },
               "continue_on_failure": false,
               "display_name": "Condition Branch",
@@ -151,7 +177,7 @@
                   "continue_on_failure": false,
                   "display_name": "Sleep",
                   "skip_execution": false,
-                  "sleep_interval": 2
+                  "sleep_interval": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC1ZR407DBR2HB7LbbbBAmlD65D4FUiR3$"
                 },
                 "object_type": "definition_activity"
               },
@@ -352,7 +378,7 @@
               "condition": {
                 "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
                 "operator": "gte",
-                "right_operand": 20
+                "right_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC1Z6I0PP2S2ck52JmnRDA7xEvNujNO1c$"
               },
               "continue_on_failure": false,
               "display_name": "Condition Branch",
@@ -369,7 +395,7 @@
                 "properties": {
                   "completion_type": "failed-completed",
                   "display_name": "Failed",
-                  "result_message": "Failed to complete patching process - Timed Out"
+                  "result_message": "Failed to complete patching process - Timed Out\n\nHKEY_LOCAL_MACHINE\\SYSTEM\\OS_Auto\\OS_Auto_Completed = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa$\""
                 },
                 "object_type": "definition_activity"
               }
@@ -385,7 +411,7 @@
               "condition": {
                 "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
                 "operator": "lt",
-                "right_operand": 20
+                "right_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC1Z6I0PP2S2ck52JmnRDA7xEvNujNO1c$"
               },
               "continue_on_failure": false,
               "display_name": "Condition Branch",
@@ -396,13 +422,13 @@
               {
                 "unique_name": "definition_activity_01EC1SRDHTLQT7ThxIwrpQz0lGMz3ad2blX",
                 "name": "Succeeded",
-                "title": "Completed",
+                "title": "Succeeded",
                 "type": "logic.completed",
                 "base_type": "activity",
                 "properties": {
                   "completion_type": "succeeded",
                   "display_name": "Succeeded",
-                  "result_message": "Patching Regkey\n\nHKEY_LOCAL_MACHINE\\SYSTEM\\OS_Auto\\OS_Auto_Completed = \"1\""
+                  "result_message": "Patching Regkey\n\nHKEY_LOCAL_MACHINE\\SYSTEM\\OS_Auto\\OS_Auto_Completed = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa$\""
                 },
                 "object_type": "definition_activity"
               }
