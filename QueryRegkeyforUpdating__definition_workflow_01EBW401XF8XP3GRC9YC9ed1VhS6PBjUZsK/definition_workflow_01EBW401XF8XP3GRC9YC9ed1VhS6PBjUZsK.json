@@ -7,20 +7,9 @@
     "base_type": "workflow",
     "variables": [
       {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "",
-          "scope": "local",
-          "name": "status",
-          "type": "datatype.string",
-          "is_required": false
-        },
-        "unique_name": "variable_workflow_01EBXE6FHW5EZ0pz9ljXJ9jM6rJXE7Lvrur",
-        "object_type": "variable_workflow"
-      },
-      {
         "schema_id": "datatype.integer",
         "properties": {
+          "value": 0,
           "scope": "local",
           "name": "loopCounter",
           "type": "datatype.integer",
@@ -28,6 +17,18 @@
           "is_required": false
         },
         "unique_name": "variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "0",
+          "scope": "local",
+          "name": "PatchStatus",
+          "type": "datatype.string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa",
         "object_type": "variable_workflow"
       }
     ],
@@ -69,17 +70,9 @@
             "base_type": "activity",
             "properties": {
               "condition": {
-                "left_operand": {
-                  "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBXE6FHW5EZ0pz9ljXJ9jM6rJXE7Lvrur$",
-                  "operator": "ne",
-                  "right_operand": "1"
-                },
-                "operator": "or",
-                "right_operand": {
-                  "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
-                  "operator": "lte",
-                  "right_operand": 2
-                }
+                "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
+                "operator": "lt",
+                "right_operand": 4
               },
               "continue_on_failure": false,
               "display_name": "Condition Branch",
@@ -128,19 +121,24 @@
               {
                 "unique_name": "definition_activity_01EBYML2YA7JR0RFIwCQbKvULb5I0tSWb2V",
                 "name": "Execute Python Script",
-                "title": "Increment Loop Counter",
+                "title": "HandleResults",
                 "type": "python3.script",
                 "base_type": "activity",
                 "properties": {
                   "action_timeout": 180,
                   "continue_on_failure": false,
-                  "display_name": "Increment Loop Counter",
-                  "script": "LoopCounter = $workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$ + 1",
+                  "display_name": "HandleResults",
+                  "script": "PatchStatus = \"$activity.definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m.output.result$\"\nLoopCount = $workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$ + 1",
                   "script_queries": [
                     {
-                      "script_query": "LoopCounter",
-                      "script_query_name": "LoopCounterOut",
+                      "script_query": "LoopCount",
+                      "script_query_name": "LoopCountOut",
                       "script_query_type": "integer"
+                    },
+                    {
+                      "script_query": "PatchStatus",
+                      "script_query_name": "PatchStatusOut",
+                      "script_query_type": "string"
                     }
                   ],
                   "skip_execution": false
@@ -159,7 +157,7 @@
                   "skip_execution": false,
                   "variables_to_update": [
                     {
-                      "variable_to_update": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBXE6FHW5EZ0pz9ljXJ9jM6rJXE7Lvrur$",
+                      "variable_to_update": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa$",
                       "variable_value_new": "$activity.definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m.output.result$"
                     }
                   ]
@@ -179,7 +177,7 @@
                   "variables_to_update": [
                     {
                       "variable_to_update": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
-                      "variable_value_new": "$activity.definition_activity_01EBYML2YA7JR0RFIwCQbKvULb5I0tSWb2V.output.script_queries.LoopCounterOut$"
+                      "variable_value_new": "$activity.definition_activity_01EBYML2YA7JR0RFIwCQbKvULb5I0tSWb2V.output.script_queries.LoopCountOut$"
                     }
                   ]
                 },
