@@ -9,6 +9,56 @@
       {
         "schema_id": "datatype.string",
         "properties": {
+          "value": "brettp@metsilabs.local",
+          "scope": "input",
+          "name": "Username",
+          "type": "datatype.string",
+          "description": "username@domain.com",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01EBU9UPXBVL46nqzKlnTFbjDdYv7W2wNdt",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "vcenter.metsilabs.local",
+          "scope": "input",
+          "name": "vCenter",
+          "type": "datatype.string",
+          "description": "vcenter.metsilabs.local",
+          "is_required": true
+        },
+        "unique_name": "variable_workflow_01EBUBL2S1VEZ3ka11pwswDN7SCflOFF96f",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "*****",
+          "scope": "input",
+          "name": "Password",
+          "type": "datatype.secure_string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EBURB1RVB900U9R9fgVx8BTcA5Vgp5lzd",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 0,
+          "scope": "input",
+          "name": "DiskID",
+          "type": "datatype.integer",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EBSHKXT8F3669tQypiXWVDjerZWIXmrYN",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
           "value": "DE01ESVWH001-Local",
           "scope": "input",
           "name": "DataStore",
@@ -28,56 +78,6 @@
           "is_required": false
         },
         "unique_name": "variable_workflow_01EBSIE85XVH61zCdGhfLqyPYUyOcOS6oeY",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "brettp@metsilabs.local",
-          "scope": "input",
-          "name": "Username",
-          "type": "datatype.string",
-          "description": "username@domain.com",
-          "is_required": true
-        },
-        "unique_name": "variable_workflow_01EBU9UPXBVL46nqzKlnTFbjDdYv7W2wNdt",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.secure_string",
-        "properties": {
-          "value": "*****",
-          "scope": "input",
-          "name": "Password",
-          "type": "datatype.secure_string",
-          "is_required": false
-        },
-        "unique_name": "variable_workflow_01EBUAB2RL21Q4eoeM0XgheCGU1tAZ7DJm7",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "vcenter.metsilabs.local",
-          "scope": "input",
-          "name": "vCenter",
-          "type": "datatype.string",
-          "description": "vcenter.metsilabs.local",
-          "is_required": true
-        },
-        "unique_name": "variable_workflow_01EBUBL2S1VEZ3ka11pwswDN7SCflOFF96f",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.integer",
-        "properties": {
-          "value": 0,
-          "scope": "input",
-          "name": "DiskID",
-          "type": "datatype.integer",
-          "is_required": false
-        },
-        "unique_name": "variable_workflow_01EBSHKXT8F3669tQypiXWVDjerZWIXmrYN",
         "object_type": "variable_workflow"
       }
     ],
@@ -102,6 +102,28 @@
     "object_type": "definition_workflow",
     "actions": [
       {
+        "unique_name": "definition_activity_01EBUXBF9BFOH351SWYJBRCY5CRPA49Iyr9",
+        "name": "Execute Python Script",
+        "title": "Grab Secure String",
+        "type": "python3.script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Grab Secure String",
+          "script": "secureString = '$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBURB1RVB900U9R9fgVx8BTcA5Vgp5lzd$'",
+          "script_queries": [
+            {
+              "script_query": "secureString",
+              "script_query_name": "outSecureString",
+              "script_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
         "unique_name": "definition_activity_01EBS8WH6SLCC6ZwHRJxmjkkX5s4llDuorV",
         "name": "Execute Powershell Script",
         "title": "Connect vCenter \u0026 Move VM Disk",
@@ -112,7 +134,7 @@
           "continue_on_failure": false,
           "display_name": "Connect vCenter \u0026 Move VM Disk",
           "execute_remote_file": false,
-          "powershell_script": "#Declare Varibles\n$vcpassword='M3t$iLab$'\n$vcuser='$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBU9UPXBVL46nqzKlnTFbjDdYv7W2wNdt$'\n$vcenter='$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBUBL2S1VEZ3ka11pwswDN7SCflOFF96f$'\n$vmname = \"$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBSIE85XVH61zCdGhfLqyPYUyOcOS6oeY$\"\n$diskID = \"$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBSHKXT8F3669tQypiXWVDjerZWIXmrYN$\"\n$destinationDatastore = \"$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBSI2J8G7K81p0Gr3jxCXEj68xjBZ4TrF$\"\n\n#Import PowerCLI module\nImport-Module VMware.VimAutomation.Core\n\n#Create vcenter credential\n$secpasswd = ConvertTo-SecureString $vcpassword -AsPlainText -Force\n$vcpass = New-Object System.Management.Automation.PSCredential ($vcuser, $secpasswd)\n\n#Connect to vcenter with built credentials\n(Connect-VIServer -Server $vcenter -Credential $vcpass -Force).SessionID\n\n#Write-Host \"!Success|\n#$Output\n\n$datastore = Get-Datastore -Name $destinationDatastore\n$disk = (get-vm -Name $vmname | Get-HardDisk)[$diskID]\n$moving = Move-HardDisk -HardDisk $disk -Datastore $datastore -Confirm:$false\n\n#Disconnect vcenter\nDisconnect-VIServer -Confirm:$false -Verbose",
+          "powershell_script": "#Declare Varibles\n\n$vcpassword='$activity.definition_activity_01EBUXBF9BFOH351SWYJBRCY5CRPA49Iyr9.output.script_queries.outSecureString$'\n$vcuser='$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBU9UPXBVL46nqzKlnTFbjDdYv7W2wNdt$'\n$vcenter='$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBUBL2S1VEZ3ka11pwswDN7SCflOFF96f$'\n$vmname = \"$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBSIE85XVH61zCdGhfLqyPYUyOcOS6oeY$\"\n$diskID = \"$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBSHKXT8F3669tQypiXWVDjerZWIXmrYN$\"\n$destinationDatastore = \"$workflow.definition_workflow_01EBS8VZ80BUD0YmuGJk3vN7rCCMovw5gUW.input.variable_workflow_01EBSI2J8G7K81p0Gr3jxCXEj68xjBZ4TrF$\"\n\n#Import PowerCLI module\nImport-Module VMware.VimAutomation.Core\n\n#Create vcenter credential\n$secpasswd = ConvertTo-SecureString $vcpassword -AsPlainText -Force\n$vcpass = New-Object System.Management.Automation.PSCredential ($vcuser, $secpasswd)\n\n#Connect to vcenter with built credentials\n(Connect-VIServer -Server $vcenter -Credential $vcpass -Force).SessionID\n\n#Write-Host \"!Success|\n#$Output\n\n$datastore = Get-Datastore -Name $destinationDatastore\n$disk = (get-vm -Name $vmname | Get-HardDisk)[$diskID]\n\n$moving = Move-HardDisk -HardDisk $disk -Datastore $datastore -Confirm:$false -ErrorAction Stop\n\n#Disconnect vcenter\nDisconnect-VIServer -Confirm:$false -Verbose\n",
           "runtime_user": {
             "override_target_runtime_user": false,
             "target_default": true
