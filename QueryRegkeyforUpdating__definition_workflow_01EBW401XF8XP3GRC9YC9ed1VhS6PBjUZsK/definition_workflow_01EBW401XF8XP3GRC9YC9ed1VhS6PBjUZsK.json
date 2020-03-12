@@ -182,6 +182,87 @@
                   ]
                 },
                 "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01EC0QHN4TXYM5HWSvmzGjR047I0dBx6eQX",
+                "name": "Condition Block",
+                "title": "Condition Block",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Condition Block",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_01EC0QHPMM1JW3306LZZI0AEd6STZHhnNET",
+                    "name": "Condition Branch",
+                    "title": "Condition Branch",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m.output.result$",
+                        "operator": "eqi",
+                        "right_operand": "1"
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Condition Branch",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01EC0T2UI0BXG6evQ9vC2z68DWeHZAVoYZh",
+                        "name": "Break",
+                        "title": "Break",
+                        "type": "logic.break",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Break",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  },
+                  {
+                    "unique_name": "definition_activity_01EC0QHQJ4R7S6UwAB5BHNOWFiyPRxUOtmj",
+                    "name": "Condition Branch",
+                    "title": "Condition Branch",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa$",
+                        "operator": "ne",
+                        "right_operand": "1"
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Condition Branch",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01EC0T5AZ1Y4Z2BA7eil8OPBd6cHWEMLZpn",
+                        "name": "Continue",
+                        "title": "Continue",
+                        "type": "logic.continue",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Continue",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           }
