@@ -1,0 +1,144 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01EA4ITEC1JI61kfX51kfXzwkyMfJZkxjUh",
+    "name": "MoveVMDisks",
+    "title": "MoveVMDisks",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": null,
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "Get VM and Move Disks to Other Datastores",
+      "display_name": "MoveVMDisks",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "target_type": "windows.endpoint",
+        "target_id": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa",
+        "execute_on_workflow_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01EA4K1XRRPSE2i1QwwRUG4VGmwQL3ViXFh",
+        "name": "Execute Powershell Script",
+        "title": "Connect vCenter",
+        "type": "windows.execute_powershell_script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Connect vCenter",
+          "execute_remote_file": false,
+          "powershell_script": "$vcpassword='M3t$iLab$'\n$vcuser='brettp@metsilabs.local'\n$vcenter='vcenter.metsilabs.local'\n\n#Import PowerCLI module\nImport-Module VMware.VimAutomation.Core\n\n#Create vcenter credential\n$secpasswd = ConvertTo-SecureString $vcpassword -AsPlainText -Force\n$vcpass = New-Object System.Management.Automation.PSCredential ($vcuser, $secpasswd)\n\n#Connect to vcenter with built credentials\n(Connect-VIServer -Server $vcenter -Credential $vcpass -Force).SessionID\n\n#Write-Host \"!Success|\n#$Output",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa"
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01EBRZ7PAKCM83GeClP0sMI3p6Trqxk4ndD",
+        "name": "Execute Powershell Script",
+        "title": "Move VM HD",
+        "type": "windows.execute_powershell_script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Move VM HD",
+          "execute_remote_file": false,
+          "powershell_script": "$Datastore1 = Get-Datastore -Name 'Datastore1'\n$myDisk = Get-VM -Name MyVm1 | Get-HardDisk\nMove-HardDisk -HardDisk $myDisk -Datastore $myDatastore1",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01EA5E325P5CM2ow62ttT3eFBaYRAznpzT0",
+        "name": "Execute Powershell Script",
+        "title": "Disconnect vCenter",
+        "type": "windows.execute_powershell_script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "description": "Disconnect from vCenter",
+          "display_name": "Disconnect vCenter",
+          "execute_remote_file": false,
+          "powershell_script": "Disconnect-VIServer -Confirm:$false -Verbose",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa": {
+      "unique_name": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa",
+      "name": "UCSD-PSA",
+      "title": "UCSD-PSA",
+      "type": "windows.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG",
+        "description": "UCSD (192.148.9.47) Powershell Agent\n\nAlready has PowerCli installed and can talk to vcenter.metsilabs.local",
+        "display_name": "UCSD-PSA",
+        "host": "psa-ucsd.metsilabs.local",
+        "port": 5985,
+        "protocol": "http"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG": {
+      "unique_name": "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG",
+      "name": "brettp@metsilabs.local",
+      "title": "brettp@metsilabs.local",
+      "type": "runtime_user.windows_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "display_name": "brettp@metsilabs.local",
+        "password": "*****",
+        "username": "*****"
+      }
+    }
+  }
+}
