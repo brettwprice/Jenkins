@@ -7,6 +7,57 @@
     "base_type": "workflow",
     "variables": [
       {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "0",
+          "scope": "local",
+          "name": "PatchStatus",
+          "type": "datatype.string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "brettp@metsilabs.local",
+          "scope": "input",
+          "name": "AdminUser",
+          "type": "datatype.string",
+          "description": "example: brettp@metsilabs.local",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC0YFM32RHS5mlAtkj7mcW7jMAxYK5Mnl",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "*****",
+          "scope": "input",
+          "name": "AdminPassword",
+          "type": "datatype.secure_string",
+          "description": "Administrator Password",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC0YXLYZ4F51cWGHRRu8c4ZqzlyobfIgA",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "172.21.8.53",
+          "scope": "input",
+          "name": "ClientIP",
+          "type": "datatype.string",
+          "description": "IP or Hostname of Machine currently in Patching",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC114TOFMN33EhalJ9NBU0aSgV0WrixTg",
+        "object_type": "variable_workflow"
+      },
+      {
         "schema_id": "datatype.integer",
         "properties": {
           "value": 0,
@@ -17,18 +68,6 @@
           "is_required": false
         },
         "unique_name": "variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t",
-        "object_type": "variable_workflow"
-      },
-      {
-        "schema_id": "datatype.string",
-        "properties": {
-          "value": "0",
-          "scope": "local",
-          "name": "PatchStatus",
-          "type": "datatype.string",
-          "is_required": false
-        },
-        "unique_name": "variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa",
         "object_type": "variable_workflow"
       }
     ],
@@ -49,6 +88,28 @@
     },
     "object_type": "definition_workflow",
     "actions": [
+      {
+        "unique_name": "definition_activity_01EC13QVW7ED01CcOFJKMAdfscGX2f41SIN",
+        "name": "Execute Python Script",
+        "title": "Retrieve Admin Password",
+        "type": "python3.script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Retrieve Admin Password",
+          "script": "AdminPass = '$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC0YXLYZ4F51cWGHRRu8c4ZqzlyobfIgA$'",
+          "script_queries": [
+            {
+              "script_query": "AdminPass",
+              "script_query_name": "AdminPassOut",
+              "script_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
       {
         "unique_name": "definition_activity_01EBX21OP97AL379c9Iqfp7rjdCR3cQ2TKk",
         "name": "While Loop",
@@ -72,7 +133,7 @@
               "condition": {
                 "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
                 "operator": "lt",
-                "right_operand": 4
+                "right_operand": 20
               },
               "continue_on_failure": false,
               "display_name": "Condition Branch",
@@ -90,7 +151,7 @@
                   "continue_on_failure": false,
                   "display_name": "Sleep",
                   "skip_execution": false,
-                  "sleep_interval": 1
+                  "sleep_interval": 15
                 },
                 "object_type": "definition_activity"
               },
@@ -105,7 +166,7 @@
                   "continue_on_failure": false,
                   "display_name": "Query Reg Key",
                   "execute_remote_file": false,
-                  "powershell_script": "$userName = \"brettp@metsilabs.local\"\n$userPassword = 'M3t$iLab$'\n$ClientIP = \"172.21.8.53\"\n$ScriptBlock = {\n\n    $registryPath = \"HKLM:\\SYSTEM\\OS_Auto\"\n    $KeyName = \"OS_Auto_Completed\"\n\n    IF(!(Test-Path $registryPath)){\n\n        Write-Host \"Key Doesn't Exist Yet - Continuing\"\n\n    } Else {\n\n        #Return Key Value - OS_Auto_Completed\n        (Get-ItemProperty -Path  $registryPath -Name $KeyName).OS_Auto_Completed \n    }\n}\n\n$secpasswd = ConvertTo-SecureString $userPassword -AsPlainText -Force\n$remoteCred = New-Object System.Management.Automation.PSCredential ($userName, $secpasswd)\n\nInvoke-Command -ComputerName $ClientIP -Credential $remoteCred -ScriptBlock $ScriptBlock",
+                  "powershell_script": "$userName = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC0YFM32RHS5mlAtkj7mcW7jMAxYK5Mnl$\"\n$userPassword = '$activity.definition_activity_01EC13QVW7ED01CcOFJKMAdfscGX2f41SIN.output.script_queries.AdminPassOut$'\n$ClientIP = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC114TOFMN33EhalJ9NBU0aSgV0WrixTg$\"\n\n$ScriptBlock = {\n\n    $registryPath = \"HKLM:\\SYSTEM\\OS_Auto\"\n    $KeyName = \"OS_Auto_Completed\"\n\n    IF(!(Test-Path $registryPath)){\n\n        Write-Host \"Key Doesn't Exist Yet - Continuing\"\n\n    } Else {\n\n        #Return Key Value - OS_Auto_Completed\n        (Get-ItemProperty -Path  $registryPath -Name $KeyName).OS_Auto_Completed \n    }\n}\n\n$secpasswd = ConvertTo-SecureString $userPassword -AsPlainText -Force\n$remoteCred = New-Object System.Management.Automation.PSCredential ($userName, $secpasswd)\n\nInvoke-Command -ComputerName $ClientIP -Credential $remoteCred -ScriptBlock $ScriptBlock",
                   "runtime_user": {
                     "override_target_runtime_user": false,
                     "target_default": true
