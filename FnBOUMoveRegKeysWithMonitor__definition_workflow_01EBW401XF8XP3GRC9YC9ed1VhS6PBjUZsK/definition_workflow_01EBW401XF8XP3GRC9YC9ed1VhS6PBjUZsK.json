@@ -1,0 +1,604 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK",
+    "name": "Configure \u0026 Kick Updating",
+    "title": "Configure \u0026 Kick Updating",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "172.21.8.53",
+          "scope": "input",
+          "name": "ClientIP",
+          "type": "datatype.string",
+          "description": "IP or Hostname of Machine currently in Patching",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC114TOFMN33EhalJ9NBU0aSgV0WrixTg",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "OU=FnBServerMoveOU,OU=Servers,DC=metsilabs,DC=local",
+          "scope": "input",
+          "name": "Required OU DN",
+          "type": "datatype.string",
+          "description": "Destination Organisation Unit - Distinguished Name",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01ECQ11MC8FVJ7hQGmpWukQC2F01sCq4Pjp",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 25,
+          "scope": "input",
+          "name": "NumberOfIterations",
+          "type": "datatype.integer",
+          "description": "Number of loop iterations\n\nIteration x Sleep = Total Wait Duration",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC1Z6I0PP2S2ck52JmnRDA7xEvNujNO1c",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "brettp@metsilabs.local",
+          "scope": "input",
+          "name": "AdminUser",
+          "type": "datatype.string",
+          "description": "example: brettp@metsilabs.local",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC0YFM32RHS5mlAtkj7mcW7jMAxYK5Mnl",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 0,
+          "scope": "local",
+          "name": "loopCounter",
+          "type": "datatype.integer",
+          "description": "Increments on every loop - handles any timeouts",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 2,
+          "scope": "input",
+          "name": "SleepTime",
+          "type": "datatype.integer",
+          "description": "Wait between iterations (in Seconds)",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC1ZR407DBR2HB7LbbbBAmlD65D4FUiR3",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "*****",
+          "scope": "input",
+          "name": "AdminPassword",
+          "type": "datatype.secure_string",
+          "description": "Administrator Password",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC0YXLYZ4F51cWGHRRu8c4ZqzlyobfIgA",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "0",
+          "scope": "local",
+          "name": "PatchStatus",
+          "type": "datatype.string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "TempBP02",
+          "scope": "input",
+          "name": "VMName",
+          "type": "datatype.string",
+          "description": "Virtual Machine Name (for the OU Move)",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01ECQ06PIG9RN11HLVTgicrG83I3wuaWsE5",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "display_name": "Configure \u0026 Kick Updating",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01EC13QVW7ED01CcOFJKMAdfscGX2f41SIN",
+        "name": "Execute Python Script",
+        "title": "Retrieve Admin Password",
+        "type": "python3.script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Retrieve Admin Password",
+          "script": "AdminPass = '$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC0YXLYZ4F51cWGHRRu8c4ZqzlyobfIgA$'",
+          "script_queries": [
+            {
+              "script_query": "AdminPass",
+              "script_query_name": "AdminPassOut",
+              "script_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01ECPZ0L8XGOP3zMOa0lYATBE2cV930GRJF",
+        "name": "Execute Powershell Script",
+        "title": "Move Organisational Unit",
+        "type": "windows.execute_powershell_script",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Move Organisational Unit",
+          "execute_remote_file": false,
+          "powershell_script": "$VMName = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01ECQ06PIG9RN11HLVTgicrG83I3wuaWsE5$\"\n$DN = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01ECQ11MC8FVJ7hQGmpWukQC2F01sCq4Pjp$\"\n\nif ((Get-ADComputer -Identity $VMName).DistinguishedName -like \"*$DN*\"){\n    Write-Host \"VM Already in (or at least a child thereof): \" $DN\n\n} Else {\n    Write-Host \"Moving VM to: \" $DN\n    Get-ADComputer -Identity $VMName | Move-ADObject -TargetPath \"$DN\"\n}",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01BHVIF0XDS5Z12TNSKoGplQh7BDwSf3nyK"
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01EBX21OP97AL379c9Iqfp7rjdCR3cQ2TKk",
+        "name": "While Loop",
+        "title": "While Loop",
+        "type": "logic.while",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "While Loop",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01EBX21R1Z2VE7PNGIS0aZtf2Dcr2K35AZy",
+            "name": "Condition Branch",
+            "title": "Condition Branch",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
+                "operator": "lt",
+                "right_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC1Z6I0PP2S2ck52JmnRDA7xEvNujNO1c$"
+              },
+              "continue_on_failure": false,
+              "display_name": "Condition Branch",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01EBYHJ90W2V449KgaOMcdXpVHjmn5GXaz3",
+                "name": "Sleep",
+                "title": "Sleep",
+                "type": "core.sleep",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Sleep",
+                  "skip_execution": false,
+                  "sleep_interval": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC1ZR407DBR2HB7LbbbBAmlD65D4FUiR3$"
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m",
+                "name": "Execute Powershell Script",
+                "title": "Query and/or create Reg Key OS_Auto",
+                "type": "windows.execute_powershell_script",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 10,
+                  "continue_on_failure": false,
+                  "display_name": "Query and/or create Reg Key OS_Auto",
+                  "execute_remote_file": false,
+                  "powershell_script": "$userName = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC0YFM32RHS5mlAtkj7mcW7jMAxYK5Mnl$\"\n$userPassword = '$activity.definition_activity_01EC13QVW7ED01CcOFJKMAdfscGX2f41SIN.output.script_queries.AdminPassOut$'\n$ClientIP = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC114TOFMN33EhalJ9NBU0aSgV0WrixTg$\"\n\n$ScriptBlock = {\n\n    #Registry Paths\n    $registryPath1 = \"HKLM:\\SYSTEM\\OS_Auto\"\n    $registryPath2 = \"HKLM:\\SYSTEM\\OS_Auto_Deployment\"\n    $registryPath3 = \"HKLM:\\SYSTEM\\OS_CHARGE\"\n\n    #Key Value Names and Dummy Value\n    $DummyStringValue = \"DUMMY\"\n    $Key1 = \"Alerts\"\n    $Key2 = \"CC\"\n    $Key3 = \"CO\"\n    $Key4 = \"ENV\"\n    $Key5 = \"ENV_Schedule\"\n    $Key6 = \"Owner\"\n    $Key7 = \"PatchSD\"\n    $Key8 = \"OS_Auto_Completed\" # Used for OS_Auto Only\n\n\n\n\n    IF(!(Test-Path $registryPath1)){\n        Write-Host \"Key Does Not Exist Yet - Creating\"\n        New-Item -Path $registryPath1 -Force | Out-Null\n        New-ItemProperty -Path $registryPath1 -Name $Key8 -Value 0 -PropertyType DWORD | Out-Null\n        \n    } Else {\n        #Return Key Value - OS_Auto_Completed\n        (Get-ItemProperty -Path  $registryPath1 -Name $Key8).OS_Auto_Completed \n    }\n\n\n}\n\n$secpasswd = ConvertTo-SecureString $userPassword -AsPlainText -Force\n$remoteCred = New-Object System.Management.Automation.PSCredential ($userName, $secpasswd)\n\nInvoke-Command -ComputerName $ClientIP -Credential $remoteCred -ScriptBlock $ScriptBlock",
+                  "runtime_user": {
+                    "override_target_runtime_user": false,
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target": true,
+                    "target_id": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa"
+                  }
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01ECNUOF6YGOL1WBnqFR5PdCHBmsrMj1ZoL",
+                "name": "Execute Powershell Script",
+                "title": "Query and/or create Reg Key OS_Auto_Deployment",
+                "type": "windows.execute_powershell_script",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 10,
+                  "continue_on_failure": false,
+                  "display_name": "Query and/or create Reg Key OS_Auto_Deployment",
+                  "execute_remote_file": false,
+                  "powershell_script": "$userName = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC0YFM32RHS5mlAtkj7mcW7jMAxYK5Mnl$\"\n$userPassword = '$activity.definition_activity_01EC13QVW7ED01CcOFJKMAdfscGX2f41SIN.output.script_queries.AdminPassOut$'\n$ClientIP = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC114TOFMN33EhalJ9NBU0aSgV0WrixTg$\"\n\n$ScriptBlock = {\n\n    #Registry Paths\n    $registryPath1 = \"HKLM:\\SYSTEM\\OS_Auto\"\n    $registryPath2 = \"HKLM:\\SYSTEM\\OS_Auto_Deployment\"\n    $registryPath3 = \"HKLM:\\SYSTEM\\OS_CHARGE\"\n\n    #Key Value Names and Dummy Value\n    $DummyStringValue = \"DUMMY\"\n    $Key1 = \"Alerts\"\n    $Key2 = \"CC\"\n    $Key3 = \"CO\"\n    $Key4 = \"ENV\"\n    $Key5 = \"ENV_Schedule\"\n    $Key6 = \"Owner\"\n    $Key7 = \"PatchSD\"\n    $Key8 = \"OS_Auto_Completed\" # Used for OS_Auto Only\n\nIF(!(Test-Path $registryPath2)){\n        Write-Host \"Key Does Not Exist Yet - Creating\"\n        New-Item -Path $registryPath2 -Force\n        New-ItemProperty -Path $registryPath2 -Name $Key1 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath2 -Name $Key2 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath2 -Name $Key3 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath2 -Name $Key4 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath2 -Name $Key5 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath2 -Name $Key6 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath2 -Name $Key7 -Value $DummyStringValue -PropertyType String\n    } Else {\n        #Return Key Value - Alerts\n        (Get-ItemProperty -Path  $registryPath2 -Name $Key1).Alerts    \n        \n    }\n\n}\n\n$secpasswd = ConvertTo-SecureString $userPassword -AsPlainText -Force\n$remoteCred = New-Object System.Management.Automation.PSCredential ($userName, $secpasswd)\n\nInvoke-Command -ComputerName $ClientIP -Credential $remoteCred -ScriptBlock $ScriptBlock",
+                  "runtime_user": {
+                    "override_target_runtime_user": false,
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target": true,
+                    "target_id": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa"
+                  }
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01ECNX48Y2R172yjgVMy2wMnhMDmQEBpaJM",
+                "name": "Execute Powershell Script",
+                "title": "Query and/or create Reg Key OS_CHARGE",
+                "type": "windows.execute_powershell_script",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 10,
+                  "continue_on_failure": false,
+                  "display_name": "Query and/or create Reg Key OS_CHARGE",
+                  "execute_remote_file": false,
+                  "powershell_script": "$userName = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC0YFM32RHS5mlAtkj7mcW7jMAxYK5Mnl$\"\n$userPassword = '$activity.definition_activity_01EC13QVW7ED01CcOFJKMAdfscGX2f41SIN.output.script_queries.AdminPassOut$'\n$ClientIP = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC114TOFMN33EhalJ9NBU0aSgV0WrixTg$\"\n\n$ScriptBlock = {\n\n    #Registry Paths\n    $registryPath1 = \"HKLM:\\SYSTEM\\OS_Auto\"\n    $registryPath2 = \"HKLM:\\SYSTEM\\OS_Auto_Deployment\"\n    $registryPath3 = \"HKLM:\\SYSTEM\\OS_CHARGE\"\n\n    #Key Value Names and Dummy Value\n    $DummyStringValue = \"DUMMY\"\n    $Key1 = \"Alerts\"\n    $Key2 = \"CC\"\n    $Key3 = \"CO\"\n    $Key4 = \"ENV\"\n    $Key5 = \"ENV_Schedule\"\n    $Key6 = \"Owner\"\n    $Key7 = \"PatchSD\"\n    $Key8 = \"OS_Auto_Completed\" # Used for OS_Auto Only\n\nIF(!(Test-Path $registryPath3)){\n        #Write-Host \"Key Does Not Exist Yet - Creating\"\n        New-Item -Path $registryPath3 -Force\n        New-ItemProperty -Path $registryPath3 -Name $Key1 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath3 -Name $Key2 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath3 -Name $Key3 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath3 -Name $Key4 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath3 -Name $Key5 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath3 -Name $Key6 -Value $DummyStringValue -PropertyType String\n        New-ItemProperty -Path $registryPath3 -Name $Key7 -Value $DummyStringValue -PropertyType String\n        \n    } Else {\n        #Return Key Value - Alerts\n        (Get-ItemProperty -Path  $registryPath3 -Name $Key1).Alerts        \n\n    }\n\n}\n\n$secpasswd = ConvertTo-SecureString $userPassword -AsPlainText -Force\n$remoteCred = New-Object System.Management.Automation.PSCredential ($userName, $secpasswd)\n\nInvoke-Command -ComputerName $ClientIP -Credential $remoteCred -ScriptBlock $ScriptBlock",
+                  "runtime_user": {
+                    "override_target_runtime_user": false,
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target": true,
+                    "target_id": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa"
+                  }
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01EBYML2YA7JR0RFIwCQbKvULb5I0tSWb2V",
+                "name": "Execute Python Script",
+                "title": "HandleResults",
+                "type": "python3.script",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 180,
+                  "continue_on_failure": false,
+                  "display_name": "HandleResults",
+                  "script": "PatchStatus = \"$activity.definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m.output.result$\"\nLoopCount = $workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$ + 1",
+                  "script_queries": [
+                    {
+                      "script_query": "LoopCount",
+                      "script_query_name": "LoopCountOut",
+                      "script_query_type": "integer"
+                    },
+                    {
+                      "script_query": "PatchStatus",
+                      "script_query_name": "PatchStatusOut",
+                      "script_query_type": "string"
+                    }
+                  ],
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01EBXEAMASUFL7QkrEfvl7rASVQOjPn4TXw",
+                "name": "Set Variables",
+                "title": "Set Variables Reg Value",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Variables Reg Value",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa$",
+                      "variable_value_new": "$activity.definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m.output.result$"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01EBYPG5VXQJW5YZK7kKICu3DHCPSrhedm6",
+                "name": "Set Variables",
+                "title": "Set Variables Loop Counter",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Variables Loop Counter",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
+                      "variable_value_new": "$activity.definition_activity_01EBYML2YA7JR0RFIwCQbKvULb5I0tSWb2V.output.script_queries.LoopCountOut$"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_01EC0QHN4TXYM5HWSvmzGjR047I0dBx6eQX",
+                "name": "Condition Block",
+                "title": "Condition Block",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Condition Block",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_01EC0QHPMM1JW3306LZZI0AEd6STZHhnNET",
+                    "name": "Condition Branch",
+                    "title": "Condition Branch",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01EBXWNFR81UF5umL75gKFfm7ac5ci9VN6m.output.result$",
+                        "operator": "eqi",
+                        "right_operand": "1"
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Condition Branch",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01EC0T2UI0BXG6evQ9vC2z68DWeHZAVoYZh",
+                        "name": "Break",
+                        "title": "Break",
+                        "type": "logic.break",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Break",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  },
+                  {
+                    "unique_name": "definition_activity_01EC0QHQJ4R7S6UwAB5BHNOWFiyPRxUOtmj",
+                    "name": "Condition Branch",
+                    "title": "Condition Branch",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa$",
+                        "operator": "ne",
+                        "right_operand": "1"
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Condition Branch",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01EC0T5AZ1Y4Z2BA7eil8OPBd6cHWEMLZpn",
+                        "name": "Continue",
+                        "title": "Continue",
+                        "type": "logic.continue",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Continue",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01EC1S7FZWDCU22scIPoNihzQthUFaCSPsH",
+        "name": "Condition Block",
+        "title": "Condition Block",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Condition Block",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01EC1S7IP3F656tXEzV1X8JF8rLpTqgBqFd",
+            "name": "Condition Branch",
+            "title": "Condition Branch",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
+                "operator": "gte",
+                "right_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC1Z6I0PP2S2ck52JmnRDA7xEvNujNO1c$"
+              },
+              "continue_on_failure": false,
+              "display_name": "Condition Branch",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01EC1QWLP6FPZ1LLF7nxPshOzn27sElzAPM",
+                "name": "Failed",
+                "title": "Failed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "display_name": "Failed",
+                  "result_message": "Failed to complete patching process - Timed Out\n\nHKEY_LOCAL_MACHINE\\SYSTEM\\OS_Auto\\OS_Auto_Completed = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa$\""
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01EC1S7JRWJZE6ZDTymw7E7dKtEDAL0mNqk",
+            "name": "Condition Branch",
+            "title": "Condition Branch",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EBYIOYXAJFC3Tw3ZWycs17ygfQuAdhz9t$",
+                "operator": "lt",
+                "right_operand": "$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.input.variable_workflow_01EC1Z6I0PP2S2ck52JmnRDA7xEvNujNO1c$"
+              },
+              "continue_on_failure": false,
+              "display_name": "Condition Branch",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01EC1SRDHTLQT7ThxIwrpQz0lGMz3ad2blX",
+                "name": "Succeeded",
+                "title": "Succeeded",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "succeeded",
+                  "display_name": "Succeeded",
+                  "result_message": "Patching Regkey\n\nHKEY_LOCAL_MACHINE\\SYSTEM\\OS_Auto\\OS_Auto_Completed = \"$workflow.definition_workflow_01EBW401XF8XP3GRC9YC9ed1VhS6PBjUZsK.local.variable_workflow_01EC0ESKMFIBK6lyDQglRaySIxDHM1d2WSa$\""
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_01BHVIF0XDS5Z12TNSKoGplQh7BDwSf3nyK": {
+      "unique_name": "definition_target_01BHVIF0XDS5Z12TNSKoGplQh7BDwSf3nyK",
+      "name": "Windows  Server (DC)",
+      "title": "Windows  Server (DC)",
+      "type": "windows.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01BHVICGWO9YO7UriInud6SVTnNSKQz2VDY",
+        "description": "192.168.9.5 - Domain Controller",
+        "display_name": "Windows  Server (DC)",
+        "host": "192.168.9.5",
+        "port": 5985,
+        "protocol": "http"
+      }
+    },
+    "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa": {
+      "unique_name": "definition_target_01EA4PBAFHQ6F2vNRwbZHeQkf4hrxFXWqfa",
+      "name": "UCSD-PSA",
+      "title": "UCSD-PSA",
+      "type": "windows.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG",
+        "description": "UCSD (192.148.9.47) Powershell Agent\n\nAlready has PowerCli installed and can talk to vcenter.metsilabs.local",
+        "display_name": "UCSD-PSA",
+        "host": "psa-ucsd.metsilabs.local",
+        "port": 5985,
+        "protocol": "http"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01BHVICGWO9YO7UriInud6SVTnNSKQz2VDY": {
+      "unique_name": "definition_runtime_user_01BHVICGWO9YO7UriInud6SVTnNSKQz2VDY",
+      "name": "Admin",
+      "title": "Admin",
+      "type": "runtime_user.windows_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "display_name": "Admin",
+        "password": "*****",
+        "username": "*****"
+      }
+    },
+    "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG": {
+      "unique_name": "definition_runtime_user_01EA4P6H783GQ6GGAe1ZjnSooSUzVlyMXdG",
+      "name": "brettp@metsilabs.local",
+      "title": "brettp@metsilabs.local",
+      "type": "runtime_user.windows_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "display_name": "brettp@metsilabs.local",
+        "password": "*****",
+        "username": "*****"
+      }
+    }
+  }
+}
